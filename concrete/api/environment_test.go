@@ -138,12 +138,15 @@ func TestDebugf(t *testing.T) {
 	env, _, _, _ := NewMockEnvironment(config, meterGas)
 
 	read, write, _ := os.Pipe()
+
+	// Capture stderr
 	stderr := os.Stderr
 	os.Stderr = write
 	defer func() {
 		os.Stderr = stderr
 	}()
 
+	// Copy captured stderr to a buffer
 	done := make(chan *bytes.Buffer)
 	go func() {
 		defer read.Close()
